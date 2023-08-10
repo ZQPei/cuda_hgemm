@@ -22,12 +22,13 @@ ncu_hgemm() {
 # $1: M. $2: N, $3: K
 evaluate_hgemm() {
     echo "Evaluating $1 * $2 * $3"
-    $WORK_PATH/output/bin/hgemm -M=$1 -N=$2 -K=$3 -enable_wmma=true -enable_mma=true -warmup_iterations=1 -profiling_iterations=10 -sleep_duration=100 -enable_check=false > log/hgemm_${1}_${2}_${3}.log 2>&1
+    $WORK_PATH/output/bin/hgemm -M=$1 -N=$2 -K=$3 -enable_wmma=true -enable_mma=true -warmup_iterations=10 -profiling_iterations=1000 -sleep_duration=100 -enable_check=false > log/hgemm_${1}_${2}_${3}.log 2>&1
     sleep 3
 }
 
 test_hgemm() {
-    dims=(256 512 768 1024 1536 2048 3072 4096 5120 6144 7168 8192 9216 10240 11264 12288 13312 14336 15360 16384)
+    # dims=(256 512 768 1024 1536 2048 3072 4096 5120 6144 7168 8192 9216 10240 11264 12288 13312 14336 15360 16384)
+    dims=(256  512  1024  2048  4096)
 
     # M == N == K
     for M in ${dims[@]};
@@ -57,6 +58,7 @@ test_hgemm() {
     # done
 }
 
-nohup $WORK_PATH/output/bin/hgemm -M=512 -N=2048 -K=1024 -enable_wmma=true -enable_mma=true -warmup_iterations=1 -profiling_iterations=10 -sleep_duration=100 -enable_check=true > log/hgemm_512_2048_1024.log 2>&1 &
+# nohup $WORK_PATH/output/bin/hgemm -M=512 -N=2048 -K=1024 -enable_wmma=true -enable_mma=true -warmup_iterations=1 -profiling_iterations=10 -sleep_duration=100 -enable_check=true > log/hgemm_512_2048_1024.log 2>&1 &
+# $WORK_PATH/output/bin/hgemm -M=1024 -N=1024 -K=1024 -enable_wmma=true -enable_mma=true -warmup_iterations=1 -profiling_iterations=10000 -sleep_duration=100 -enable_check=true > log/hgemm_1024_1024_1024.log 2>&1
 # sudo ncu --set full --target-processes all --force-overwrite -o ncu/hgemm_8192_8192_8192 $WORK_PATH/output/bin/hgemm -M=8192 -N=8192 -K=8192 -enable_wmma=true -enable_mma=true -warmup_iterations=1 -profiling_iterations=1 -sleep_duration=100 -enable_check=false > log/ncu_hgemm_8192_8192_8192.log 2>&1
-# test_hgemm
+test_hgemm

@@ -44,7 +44,13 @@ else ()
 endif ()
 
 set (SYS_CUDART_PATH "/usr/local/cuda")
+if(CMAKE_SYSTEM_PROCESSOR  MATCHES "(x86_64)|(AMD64|amd64)|(^i.86$)")
 set (SYS_CUDA_DRIVER_PATH "/usr/lib/x86_64-linux-gnu")
+elseif (CMAKE_SYSTEM_PROCESSOR  MATCHES "^aarch64")
+set (SYS_CUDA_DRIVER_PATH "/usr/lib/aarch64-linux-gnu")
+else()
+message("Not support this processor!")
+endif()
 
 find_package(gflags REQUIRED)
 find_package(OpenMP REQUIRED)
