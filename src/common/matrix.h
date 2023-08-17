@@ -70,6 +70,22 @@ public:
         return m_gpu_data;
     }
 
+    void zeros() {
+        HGEMM_CHECK_CUDART_ERROR(
+            cudaMemset(m_gpu_data, 0x00, m_elem_num * sizeof(half)));
+        moveToHost();
+    }
+
+    void random(float min = -2.0, float max = 2.0) {
+        std::random_device rd;
+        std::default_random_engine engine{rd()};
+        std::uniform_real_distribution<float> uniform(min, max);
+        for (size_t i = 0; i < m_elem_num; ++i) {
+            m_data[i] = __float2half(uniform(engine));
+        }
+        moveToHost();
+    }
+
     void tearUp(Matrix *base) {
         HGEMM_CHECK(base);
         HGEMM_CHECK_EQ(m_row, base->getRow());

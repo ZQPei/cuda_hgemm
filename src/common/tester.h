@@ -71,7 +71,8 @@ public:
     void evaluate(Func &&hgemm, const std::string &name) {
         HLOG("----------------- Evaluating %s -----------------", name.c_str());
         usleep(m_sleep_duration * 1000);
-        m_C->tearUp(m_base);
+        // m_C->tearUp(m_base);
+        m_C->zeros();
 
         // warm up
         m_cuda_timer.start();

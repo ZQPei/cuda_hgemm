@@ -45,12 +45,12 @@ echo_cmd() {
 
 echo "========== build cuda_hgemm =========="
 
-echo_cmd "rm -rf build output"
-echo_cmd "mkdir build"
+# echo_cmd "rm -rf build output"
+echo_cmd "mkdir -p build"
 
 echo_cmd "cd build"
 echo_cmd "cmake -DCMAKE_CUDA_ARCHITECTURES=$CUDA_ARCHITECTURE -DCMAKE_BUILD_TYPE=$BUILD_TYPE -DHGEMM_VERBOSE_MAKEFILE=$VERBOSE_MAKEFILE -DCMAKE_INSTALL_PREFIX=$WORK_PATH/output -DCMAKE_SKIP_RPATH=ON .."
-echo_cmd "make -j"
+echo_cmd "make -j32"
 echo_cmd "make install"
 
 echo "========== build info =========="
